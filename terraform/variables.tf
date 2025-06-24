@@ -57,3 +57,9 @@ variable "s3_bucket_name" {
   type        = string
   default     = "bucket-for-logs-1234567890" # Replace with your desired bucket name
 }
+
+variable "github_token" {
+  description = "GitHub token for authentication"
+  type        = string
+  sensitive = true  
+}
