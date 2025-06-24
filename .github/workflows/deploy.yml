@@ -42,7 +42,8 @@ jobs:
       - name: Apply Terraform configuration
         run: |
           terraform init
-          terraform apply --auto-approve
+          VAR_FILE="${{ github.event.inputs.stage }}.tfvars"
+          terraform apply -var-file="$VAR_FILE" --auto-approve
         working-directory: ./terraform   
 
       - name: Validate app health
