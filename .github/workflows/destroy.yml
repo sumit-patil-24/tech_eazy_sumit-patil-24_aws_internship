@@ -4,8 +4,6 @@ on:
   push:
     paths:
       - '.github/workflows/destroy.yml'
-    branches:
-      - assignment-3
 
 jobs:
   destroy:
