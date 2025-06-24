@@ -35,7 +35,7 @@ jobs:
       - name: Apply Terraform configuration
         run: |
           terraform init
-          terraform apply --auto-approve
+          terraform apply -var "stage=${{ github.event.inputs.stage }}" --auto-approve
         working-directory: ./terraform   
 
       - name: Validate app health
