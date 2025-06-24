@@ -1,9 +1,16 @@
 name: Deploy to EC2
 
 on:
-  push:
-    paths:
-      - 'terraform/**' 
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'Deployment stage'
+        required: true
+        default: 'dev'
+        options:
+          - dev
+          - qa
+          - prod 
  
 jobs:
   deploy:
