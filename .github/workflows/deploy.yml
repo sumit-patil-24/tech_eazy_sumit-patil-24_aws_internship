@@ -41,12 +41,12 @@ jobs:
 
       - name: Apply Terraform configuration
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           terraform init
           VAR_FILE="${{ github.event.inputs.stage }}.tfvars"
           terraform apply -var-file="$VAR_FILE" --auto-approve \
-          -var "github_token=${{ secrets.GITHUB_TOKEN }}" \
+          -var "github_token=${{ secrets.GH_TOKEN }}" \
           -var "stage=${{ github.event.inputs.stage }}"
         working-directory: ./terraform   
 
