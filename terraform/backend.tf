@@ -1,4 +1,3 @@
-/*
 terraform {
   backend "s3" {
     bucket         = "sumit-4254"        #"your-terraform-state-bucket"
@@ -7,4 +6,3 @@ terraform {
     encrypt        = true
   }
 }
-*/

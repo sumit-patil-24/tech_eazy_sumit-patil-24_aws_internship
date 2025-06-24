@@ -5,5 +5,5 @@ repo_url_value = "https://github.com/techeazy-consulting/techeazy-devops.git"
 repo_dir_name = "techeazy-devops"
 java_version_value = "openjdk-21-jdk-headless"
 aws_region = "us-east-1"
-stop_after_minutes   = 2
+stop_after_minutes   = 5
 
