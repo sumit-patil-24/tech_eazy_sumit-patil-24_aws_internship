@@ -34,19 +34,43 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           aws-output: json
 
+      # NEW STEP: Store GitHub PAT in AWS Secrets Manager
+      - name: Store GitHub PAT in AWS Secrets Manager
+        run: |
+          # Define the secret name in AWS Secrets Manager
+          # You can make this dynamic if needed, e.g., "github/pat/${{ github.repository }}"
+          SECRET_NAME="github/pat/my-private-repo-token"
+          AWS_REGION="${{ secrets.AWS_REGION }}"
+
+          # Attempt to update the secret if it exists, otherwise create it
+          # Using update-secret first is robust as it handles both existing and new secrets.
+          # Note: The || true at the end allows the script to continue if update-secret fails
+          # because the secret doesn't exist, letting create-secret run next.
+          aws secretsmanager update-secret --secret-id "${SECRET_NAME}" --secret-string "${{ secrets.GH_TOKEN }}" --region "${AWS_REGION}" || true
+
+          # If update failed (likely because the secret didn't exist), try to create it
+          # Ensure this command is idempotent or only runs if the secret doesn't exist.
+          # For a first run, 'create-secret' might be needed. For subsequent runs, 'update-secret' is preferred.
+          # This example uses a simple OR logic. For production, you might want a more robust check.
+          aws secretsmanager describe-secret --secret-id "${SECRET_NAME}" --region "${AWS_REGION}" 2>/dev/null || \
+          aws secretsmanager create-secret --name "${SECRET_NAME}" --description "GitHub PAT for private repo access" --secret-string "${{ secrets.GH_TOKEN }}" --region "${AWS_REGION}"
+
+        env:
+          # Ensure AWS credentials are available for this step as well
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }} # For aws cli
+
       - name: Initialize Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: '1.2.3'
 
       - name: Apply Terraform configuration
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           terraform init
           VAR_FILE="${{ github.event.inputs.stage }}.tfvars"
           terraform apply -var-file="$VAR_FILE" --auto-approve \
-          -var "github_token=${{ secrets.GH_TOKEN }}" \
           -var "stage=${{ github.event.inputs.stage }}"
         working-directory: ./terraform   
 
@@ -55,3 +79,4 @@ jobs:
           EC2_PUBLIC_IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=MyInstance" --query 'Reservations[].Instances[].PublicIpAddress' --output text)
           sleep 120
           curl -f http://$EC2_PUBLIC_IP:80
+          curl -f http://$EC2_PUBLIC_IP:8080
