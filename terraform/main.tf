@@ -11,6 +11,7 @@ resource "aws_instance" "example1" {
     iam_instance_profile = aws_iam_instance_profile.ec2_secrets_reader_profile.name
     user_data = base64encode(templatefile("./script.sh", {
     repo_url     = var.repo_url_value,
+    SECRET_NAME = "github/pat/my-private-repo-token",
     java_version = var.java_version_value,
     repo_dir_name= var.repo_dir_name,
     stop_after_minutes = var.stop_after_minutes,
