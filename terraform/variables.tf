@@ -16,7 +16,7 @@ variable "instance_type_value" {
     default     = "t2.micro"
 }
 
-variable "java_version_value" {
+variable "java_version" {
     description = "java installation version"
     type        = number
     default     = "21"
