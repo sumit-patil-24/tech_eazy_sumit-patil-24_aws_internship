@@ -47,7 +47,13 @@ unset GITHUB_PAT
 
  
 cd "$REPO_DIR_NAME"
-mvn spring-boot:run &
+chmod +x mvnw
+
+#build artifact
+./mvnw clean package
+
+# Run the app
+nohup $JAVA_HOME/bin/java -jar target/*.jar > app.log 2>&1 &
 
 
 # --- Upload cloud-init logs to S3 ---
