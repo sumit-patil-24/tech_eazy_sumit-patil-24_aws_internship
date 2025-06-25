@@ -21,7 +21,7 @@ if ! command -v aws &> /dev/null; then
   unzip awscliv2.zip
   sudo ./aws/install
 fi
-sudo apt install -y openjdk-"${JAVA_VERSION}"-jdk -y
+sudo apt install "$JAVA_VERSION" -y
 sudo apt install maven -y
 
 
