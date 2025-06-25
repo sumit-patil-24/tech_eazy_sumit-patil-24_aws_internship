@@ -9,6 +9,21 @@ REPO_DIR_NAME="${repo_dir_name}"
 STOP_INSTANCE="${stop_after_minutes}"
 S3_BUCKET_NAME="${s3_bucket_name}"
 SECRET_NAME="github/pat/my-private-repo-token" # Ensure this matches your GitHub Actions secret name
+AWS_REGION="aws_region"
+
+
+sudo apt update 
+# Check if unzip is installed, and install if not (needed for awscli v2 install)
+if ! command -v unzip &> /dev/null; then
+  sudo apt install -y unzip
+fi
+if ! command -v aws &> /dev/null; then
+  curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+  unzip awscliv2.zip
+  sudo ./aws/install
+fi
+sudo apt install "$JAVA_VERSION" -y
+sudo apt install maven -y
 
 
 echo "Attempting to retrieve GitHub PAT from AWS Secrets Manager: ${SECRET_NAME} in region ${AWS_REGION_FOR_SCRIPT}..."
@@ -31,9 +46,7 @@ git clone "${CLONE_URL}"
 # Clean up sensitive token
 unset GITHUB_PAT
 
-sudo apt update  
-sudo apt install "$JAVA_VERSION" -y
-apt install maven -y
+ 
 cd "$REPO_DIR_NAME"
 mvn spring-boot:run &
 
