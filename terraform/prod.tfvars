@@ -1,7 +1,7 @@
 ami_value = "ami-053b0d53c279acc90"
 instance_type_value = "t2.micro"
 key_name_value = "my-key-pair"
-repo_url_value = "https://github.com/sumit-patil-24/Valentine-Day-DevOps-Project-Personal.git"
+repo_url = "https://github.com/sumit-patil-24/Valentine-Day-DevOps-Project-Personal.git"
 repo_dir_name = "Valentine-Day-DevOps-Project-Personal"
 java_version = "21"
 aws_region = "us-east-1"
