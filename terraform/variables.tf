@@ -28,7 +28,7 @@ variable "key_name_value" {
     default     = "new-key.pem"
 }
 
-variable "repo_url_value" {
+variable "repo_url" {
     description = "the github url of repository to clone"
     type        = string
     default     = "https://github.com/techeazy-consulting/techeazy-devops.git"
