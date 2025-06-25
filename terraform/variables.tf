@@ -18,8 +18,8 @@ variable "instance_type_value" {
 
 variable "java_version_value" {
     description = "java installation version"
-    type        = string
-    default     = "openjdk-21-jdk-headless"
+    type        = number
+    default     = "21"
 }
 
 variable "key_name_value" {
