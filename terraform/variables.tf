@@ -16,10 +16,10 @@ variable "instance_type_value" {
     default     = "t2.micro"
 }
 
-variable "java_version" {
+variable "java_version_value" {
     description = "java installation version"
-    type        = number
-    default     = "21"
+    type        = string
+    default     = "openjdk-21-jdk-headless"
 }
 
 variable "key_name_value" {
