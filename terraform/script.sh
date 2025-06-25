@@ -3,7 +3,6 @@
 # Stop script on any error
 set -e
 
-REPO_URL="${repo_url}"
 JAVA_VERSION="${java_version}"
 REPO_DIR_NAME="${repo_dir_name}"
 STOP_INSTANCE="${stop_after_minutes}"
