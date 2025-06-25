@@ -25,8 +25,8 @@ resource "aws_instance" "example1" {
 
   depends_on = [
     aws_s3_bucket.example
-    aws_iam_instance_profile.ec2_secrets_reader_profile # Explicit dependency for clarity
-
+    aws_iam_instance_profile.ec2_secrets_reader_profile 
+# Explicit dependency for clarity
   ]
 }
 
