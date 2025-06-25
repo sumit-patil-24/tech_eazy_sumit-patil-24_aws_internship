@@ -16,6 +16,7 @@ resource "aws_instance" "example1" {
     repo_dir_name= var.repo_dir_name
     stop_after_minutes = var.stop_after_minutes
     s3_bucket_name = var.s3_bucket_name
+    aws_region = var.aws_region
   }))
 
   tags = {
