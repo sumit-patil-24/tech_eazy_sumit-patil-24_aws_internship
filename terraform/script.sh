@@ -7,8 +7,8 @@ REPO_URL="${repo_url}"
 JAVA_VERSION="${java_version}"
 REPO_DIR_NAME="${repo_dir_name}"
 STOP_INSTANCE="${stop_after_minutes}"
+S3_BUCKET_NAME="${s3_bucket_name}"
 SECRET_NAME="github/pat/my-private-repo-token" # Ensure this matches your GitHub Actions secret name
-CLONE_URL=$(echo "${REPO_URL}" | sed "s/https:\/\//https:\/\/${GITHUB_PAT}@/")
 
 
 echo "Attempting to retrieve GitHub PAT from AWS Secrets Manager: ${SECRET_NAME} in region ${AWS_REGION_FOR_SCRIPT}..."
@@ -26,12 +26,20 @@ if [ -z "$GITHUB_PAT" ]; then
 fi
 echo "GitHub PAT successfully retrieved."
 
+CLONE_URL=$(echo "${REPO_URL}" | sed "s/https:\/\//https:\/\/${GITHUB_PAT}@/")
 git clone "${CLONE_URL}"
+# Clean up sensitive token
+unset GITHUB_PAT
+
 sudo apt update  
 sudo apt install "$JAVA_VERSION" -y
 apt install maven -y
 cd "$REPO_DIR_NAME"
 mvn spring-boot:run &
 
-aws s3 cp /var/log/cloud-init-output.log s3://"${s3_bucket_name}"/app/logs/cloud-init-output-$(hostname)-$(date +%Y%m%d%H%M%S).log
+# Upload cloud-init log
+sleep 10 # Give cloud-init a moment
+aws s3 cp /var/log/cloud-init-output.log s3://"${S3_BUCKET_NAME}"/app/logs/cloud-init-output-$(hostname)-$(date +%Y%m%d%H%M%S).log
+
+
 sudo shutdown -h +"$STOP_INSTANCE"  
